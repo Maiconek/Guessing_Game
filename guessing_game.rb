@@ -1,3 +1,14 @@
+#Guessing Game
+# Punkt 1 - done
+# Punkt 2 - done
+# Punkt 3 - done
+# Punkt 4 - not done
+# Punkt 5 - not done
+# Punkt 6 - not done
+# Punkt 7 - not done
+# Punkt 8 - not done
+
+
 def game()
     target = rand(1..100)
     game_over = false
