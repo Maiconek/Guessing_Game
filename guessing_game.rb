@@ -2,11 +2,13 @@
 # Punkt 1 - done
 # Punkt 2 - done
 # Punkt 3 - done
-# Punkt 4 - not done
+# Punkt 4 - done
 # Punkt 5 - not done
 # Punkt 6 - not done
 # Punkt 7 - not done
 # Punkt 8 - not done
+
+require 'date'
 
 $results = Hash.new
 
@@ -15,11 +17,22 @@ def saveResults(names, counter)
 end
 
 def printResults()
-    $results.each do |key, value|
+    #puts $results.sort_by{ |key, value| value }
+    
+    scoreboard = $results.sort_by{ |key, value| value }
+    
+    scoreboard.each do |key, value|
         puts "Gracz #{key} odgadł prawidłową liczbe w #{value} krokach"
     end
 end
 
+def saveToTextFile(names, counter)
+    current_datetime = DateTime.now
+
+    open('hallOfFame.txt', 'w') do |f|
+        f.puts "Gracz #{names} odgadł prawidłową liczbe w #{counter} w dniu #{current_datetime}" 
+    end
+end
 
 def menu()
     puts "Witamy w Guessing Game"
@@ -68,6 +81,7 @@ def game()
     names = gets
 
     saveResults(names, counter)
+    saveToTextFile(names, counter)
 
     playAgain()
 end
@@ -84,7 +98,7 @@ def playAgain()
             menu()
         elsif choice.upcase =="N\n"
             puts "Koniec działania programu"
-            end_program = true
+            exit
         else
             puts "Nie ma takiej opcji mordo"
         end    
