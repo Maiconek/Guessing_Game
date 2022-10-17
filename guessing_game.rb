@@ -29,8 +29,9 @@ end
 def saveToTextFile(names, counter)
     current_datetime = DateTime.now
 
-    open('hallOfFame.txt', 'w') do |f|
-        f.puts "Gracz #{names} odgadł prawidłową liczbe w #{counter} w dniu #{current_datetime}" 
+    File.open('hallOfFame.txt', 'a') do |f|
+        #f.write "Gracz #{names} odgadł prawidłową liczbe w #{counter} krokach  w dniu #{current_datetime}"
+        f.write "#{names}, #{counter}, #{current_datetime}\n" 
     end
 end
 
@@ -80,29 +81,26 @@ def game()
     puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik"
     names = gets
 
-    saveResults(names, counter)
-    saveToTextFile(names, counter)
+    saveResults(names.strip, counter)
+    saveToTextFile(names.strip, counter)
 
     playAgain()
 end
 
 
 def playAgain()
-    end_program = false
-    while !end_program
-        puts "Czy gramy jeszcze raz? (Y/N)"
+    puts "Czy gramy jeszcze raz? (Y/N)"
 
-        choice = gets
+    choice = gets
 
-        if choice.upcase == "Y\n"
-            menu()
-        elsif choice.upcase =="N\n"
-            puts "Koniec działania programu"
-            exit
-        else
-            puts "Nie ma takiej opcji mordo"
-        end    
-    end 
+    if choice.upcase == "Y\n"
+        menu()
+    elsif choice.upcase =="N\n"
+        puts "Koniec działania programu"
+        exit
+    else
+        puts "Nie ma takiej opcji mordo"
+    end    
 end
     
 
