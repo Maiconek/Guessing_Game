@@ -3,37 +3,36 @@
 # Punkt 2 - done
 # Punkt 3 - done
 # Punkt 4 - done
-# Punkt 5 - not done
+# Punkt 5 - in progress
 # Punkt 6 - not done
 # Punkt 7 - not done
 # Punkt 8 - not done
 
 require 'date'
 
-$results = Hash.new
+$gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
-def saveResults(names, counter)
-    $results[names] = counter
-end
-
-def printResults()
-    #puts $results.sort_by{ |key, value| value }
-    
-    scoreboard = $results.sort_by{ |key, value| value }
-    
-    scoreboard.each do |key, value|
-        puts "Gracz #{key} odgadł prawidłową liczbe w #{value} krokach"
+def saveResults(gracz)
+    File.open("hallOfFame.txt", 'a') do |f|
+        f.write "#{gracz[:name]}, #{gracz[:counter]}, #{gracz[:number_to_guess]}, #{gracz[:date]}\n"
     end
 end
 
-def saveToTextFile(names, counter)
-    current_datetime = DateTime.now
+def extractPlayers()
+    hall_of_fame = []
 
-    File.open('hallOfFame.txt', 'a') do |f|
-        #f.write "Gracz #{names} odgadł prawidłową liczbe w #{counter} krokach  w dniu #{current_datetime}"
-        f.write "#{names}, #{counter}, #{current_datetime}\n" 
+    if(File.file?('hallOfFame.txt'))
+        File.foreach("hallOfFame.txt") { |each_line|  
+            arr = each_line.split(",")
+            hall_of_fame.push($gracz.new(arr[0], arr[1], arr[2], arr[3]))
+        }
     end
+
+    #hall_of_fame = hall_of_fame.sort {|a,b| a[:counter] <=> b[:counter]}
+    puts hall_of_fame.sort {|a,b| a[:counter] <=> b[:counter]}
 end
+
+
 
 def menu()
     puts "Witamy w Guessing Game"
@@ -46,19 +45,18 @@ def menu()
     when 1
         game()
     when 2
-        printResults()
+        extractPlayers
         menu()
     else
         puts "Nie ma takiej opcji"    
     end
 end
 
-
 def game()
     target = rand(1..100)
     game_over = false
-    counter = 0    
-    
+    counter = 0  
+
     puts "Teraz będziesz zgadywał liczbe"
         while !game_over
             puts "Podaj liczbe"
@@ -78,11 +76,13 @@ def game()
             end
         end
     
+
     puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik"
     names = gets
 
-    saveResults(names.strip, counter)
-    saveToTextFile(names.strip, counter)
+    player = $gracz.new(names.strip, counter, target, Time.now)
+
+    saveResults(player)
 
     playAgain()
 end
@@ -102,6 +102,6 @@ def playAgain()
         puts "Nie ma takiej opcji mordo"
     end    
 end
-    
 
+    
 menu()
