@@ -14,22 +14,22 @@ $gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
 def saveResults(gracz)
     File.open("hallOfFame.txt", 'a') do |f|
-        f.write "#{gracz[:name]}, #{gracz[:counter]}, #{gracz[:number_to_guess]}, #{gracz[:date]}\n"
+        f.write "#{gracz[:name]},#{gracz[:counter]},#{gracz[:number_to_guess]},#{gracz[:date]}\n"
     end
 end
 
 def extractPlayers()
     hall_of_fame = []
-
+    xd = []
     if(File.file?('hallOfFame.txt'))
         File.foreach("hallOfFame.txt") { |each_line|  
             arr = each_line.split(",")
-            hall_of_fame.push($gracz.new(arr[0], arr[1], arr[2], arr[3]))
+            hall_of_fame.push($gracz.new(arr[0], arr[1].to_i, arr[2].to_i, arr[3]))
         }
     end
 
-    #hall_of_fame = hall_of_fame.sort {|a,b| a[:counter] <=> b[:counter]}
-    puts hall_of_fame.sort {|a,b| a[:counter] <=> b[:counter]}
+    sorted_hall_of_fame = hall_of_fame.sort_by(&:counter)
+    puts sorted_hall_of_fame
 end
 
 
