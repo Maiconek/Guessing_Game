@@ -9,6 +9,7 @@
 # Punkt 8 - not done
 
 require 'date'
+require 'colorize'
 
 $gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
@@ -20,7 +21,7 @@ end
 
 def extractPlayers()
     hall_of_fame = []
-    xd = []
+
     if(File.file?('hallOfFame.txt'))
         File.foreach("hallOfFame.txt") { |each_line|  
             arr = each_line.split(",")
@@ -29,15 +30,17 @@ def extractPlayers()
     end
 
     sorted_hall_of_fame = hall_of_fame.sort_by(&:counter)
-    puts sorted_hall_of_fame
+    return sorted_hall_of_fame
 end
 
 
-
 def menu()
-    puts "Witamy w Guessing Game"
-    puts "1. Zagraj"
-    puts "2. Zobacz ostatnie wyniki"
+    puts "Witamy w Guessing Game".light_cyan
+    puts "1. Zagraj".light_green
+    puts "2. Zobacz ostatnie wyniki".light_yellow
+    puts "3. Wyjdź z gry".light_red
+    #puts String.colors
+    #puts String.modes
 
     option = gets
 
@@ -45,8 +48,11 @@ def menu()
     when 1
         game()
     when 2
-        extractPlayers
+        puts extractPlayers()
         menu()
+    when 3
+        puts "papa".light_magenta
+        exit
     else
         puts "Nie ma takiej opcji"    
     end
@@ -57,27 +63,27 @@ def game()
     game_over = false
     counter = 0  
 
-    puts "Teraz będziesz zgadywał liczbe"
+    puts "Teraz będziesz zgadywał liczbe".light_cyan
         while !game_over
-            puts "Podaj liczbe"
+            puts "Podaj liczbe".light_magenta
             input = gets
             counter += 1
 
             if input == "koniec\n"
-                puts "żegnaj"
+                puts "żegnaj".light_red
                 exit
             elsif input.to_i > target
-                puts "za duża"
+                puts "za duża".light_red
             elsif input.to_i < target
-                puts "za mała"
+                puts "za mała".light_yellow
             else
-                puts "Brawo zgadłeś"
+                puts "Brawo zgadłeś".light_green
                 game_over = true
             end
         end
     
 
-    puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik"
+    puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik".light_blue
     names = gets
 
     player = $gracz.new(names.strip, counter, target, Time.now)
@@ -89,17 +95,17 @@ end
 
 
 def playAgain()
-    puts "Czy gramy jeszcze raz? (Y/N)"
+    puts "Czy gramy jeszcze raz? (Y/N)".light_magenta
 
     choice = gets
 
     if choice.upcase == "Y\n"
         menu()
     elsif choice.upcase =="N\n"
-        puts "Koniec działania programu"
+        puts "Koniec działania programu".light_red
         exit
     else
-        puts "Nie ma takiej opcji mordo"
+        puts "Nie ma takiej opcji mordo".light_yellow
     end    
 end
 
