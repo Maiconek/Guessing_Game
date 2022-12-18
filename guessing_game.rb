@@ -11,6 +11,7 @@
 require 'date'
 require 'colorize'
 
+String.disable_colorization = false
 $gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
 def saveResults(gracz)
@@ -33,20 +34,37 @@ def extractPlayers()
     return sorted_hall_of_fame
 end
 
+def printResults()
+    results = extractPlayers()
+    position = 1
+
+    results.each { |p|
+        if results.index(p) % 2 == 0
+            puts "#{position}. #{p.name}, ilość prób: #{p.counter}, zgadywana liczba #{p.number_to_guess}"
+            .colorize(:color => :light_white, :background => :blue)
+        else
+            puts "#{position}. #{p.name}, ilość prób: #{p.counter}, zgadywana liczba #{p.number_to_guess}"
+            .colorize(:color => :light_white)
+        end
+        position += 1
+    }
+end
+
 def stats()
     hall_of_fame = extractPlayers()
-    sum = 0
-    divider = 0
+    sum = 0.0
+    divider = 0.0
 
 
     hall_of_fame.each { |p|
             sum += p.counter
-            divider += 1
+            divider += 1.0
     }
 
     average = sum / divider
-    puts "Średnia ilość prób #{average}"
+    puts "Średnia ilość prób #{average.to_f}"
 end
+
 
 def menu()
     puts "Witamy w Guessing Game".light_cyan
@@ -58,22 +76,25 @@ def menu()
     #puts String.modes
 
     option = gets
-
-    case option.to_i
-    when 1
-        game()
-    when 2
-        puts extractPlayers()
-        menu()
-    when 3
-        stats()
-        menu()
-    when 4
+    begin
+        case option.to_i
+        when 1
+            game()
+        when 2
+            printResults
+            menu()
+        when 3
+            stats()
+            menu()
+        when 4
+            puts "papa".light_magenta
+            exit
+        else
+            puts "Nie ma takiej opcji"    
+        end
+    rescue Interrupt => e
         puts "papa".light_magenta
-        exit
-    else
-        puts "Nie ma takiej opcji"    
-    end
+    end   
 end
 
 def game()
@@ -127,5 +148,5 @@ def playAgain()
     end    
 end
 
-    
+ 
 menu()
