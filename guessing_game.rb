@@ -33,12 +33,27 @@ def extractPlayers()
     return sorted_hall_of_fame
 end
 
+def stats()
+    hall_of_fame = extractPlayers()
+    sum = 0
+    divider = 0
+
+
+    hall_of_fame.each { |p|
+            sum += p.counter
+            divider += 1
+    }
+
+    average = sum / divider
+    puts "Średnia ilość prób #{average}"
+end
 
 def menu()
     puts "Witamy w Guessing Game".light_cyan
     puts "1. Zagraj".light_green
     puts "2. Zobacz ostatnie wyniki".light_yellow
-    puts "3. Wyjdź z gry".light_red
+    puts "3. Ciekawe statystki".light_magenta
+    puts "4. Wyjdź z gry".light_red
     #puts String.colors
     #puts String.modes
 
@@ -51,6 +66,9 @@ def menu()
         puts extractPlayers()
         menu()
     when 3
+        stats()
+        menu()
+    when 4
         puts "papa".light_magenta
         exit
     else
@@ -65,7 +83,7 @@ def game()
 
     puts "Teraz będziesz zgadywał liczbe".light_cyan
         while !game_over
-            puts "Podaj liczbe".light_magenta
+            puts "Podaj liczbe".light_white
             input = gets
             counter += 1
 
