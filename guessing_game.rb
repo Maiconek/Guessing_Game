@@ -1,9 +1,11 @@
-#Guessing Game
+# Marcin Baranowski
+
+# Guessing Game
 # Punkt 1 - done
 # Punkt 2 - done
 # Punkt 3 - done
 # Punkt 4 - done
-# Punkt 5 - in progress
+# Punkt 5 - done
 # Punkt 6 - not done
 # Punkt 7 - not done
 # Punkt 8 - not done
@@ -12,6 +14,7 @@ require 'date'
 require 'colorize'
 
 String.disable_colorization = false
+
 $gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
 def saveResults(gracz)
@@ -54,29 +57,45 @@ def stats()
     hall_of_fame = extractPlayers()
     sum = 0.0
     divider = 0.0
-
+    numbers = []
 
     hall_of_fame.each { |p|
+            numbers.append(p.number_to_guess)
             sum += p.counter
             divider += 1.0
     }
 
     average = sum / divider
     puts "Średnia ilość prób #{average.to_f}"
+    puts "Najmniejsza zgadnięta liczba #{numbers.min}"
+    puts "Największa zgadnięta liczba #{numbers.max}"
+end
+
+def checkIfNewRecord(player)
+    hall_of_fame = extractPlayers()
+    results = []
+    hall_of_fame.each { |p|
+        results.append(p.number_to_guess) 
+    }
+
+    if player.counter < results.min
+        puts "Właśnie ustanowileś nowy rekord w Guessing Game! Gratulacje".light_green
+    end
 end
 
 
 def menu()
-    puts "Witamy w Guessing Game".light_cyan
-    puts "1. Zagraj".light_green
-    puts "2. Zobacz ostatnie wyniki".light_yellow
-    puts "3. Ciekawe statystki".light_magenta
-    puts "4. Wyjdź z gry".light_red
-    #puts String.colors
-    #puts String.modes
-
-    option = gets
     begin
+        puts "Witamy w Guessing Game".light_cyan
+        puts "1. Zagraj".light_green
+        puts "2. Zobacz ostatnie wyniki".light_yellow
+        puts "3. Ciekawe statystki".light_magenta
+        puts "4. Wyjdź z gry".light_red
+        #puts String.colors
+        #puts String.modes
+
+        option = gets
+    
         case option.to_i
         when 1
             game()
@@ -103,23 +122,24 @@ def game()
     counter = 0  
 
     puts "Teraz będziesz zgadywał liczbe".light_cyan
-        while !game_over
-            puts "Podaj liczbe".light_white
-            input = gets
-            counter += 1
+    
+    while !game_over
+        puts "Podaj liczbe".light_white
+        input = gets
+        counter += 1
 
-            if input == "koniec\n"
-                puts "żegnaj".light_red
-                exit
-            elsif input.to_i > target
-                puts "za duża".light_red
-            elsif input.to_i < target
-                puts "za mała".light_yellow
-            else
-                puts "Brawo zgadłeś".light_green
-                game_over = true
-            end
+        if input == "koniec\n"
+            puts "żegnaj".light_red
+            exit
+        elsif input.to_i > target
+            puts "za duża".light_red
+        elsif input.to_i < target
+            puts "za mała".light_yellow
+        else
+            puts "Brawo zgadłeś".light_green
+            game_over = true
         end
+    end
     
 
     puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik".light_blue
@@ -127,6 +147,7 @@ def game()
 
     player = $gracz.new(names.strip, counter, target, Time.now)
 
+    checkIfNewRecord(player)
     saveResults(player)
 
     playAgain()
