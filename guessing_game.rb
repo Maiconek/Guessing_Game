@@ -1,4 +1,4 @@
-# Marcin Baranowski
+# Author => Marcin Baranowski
 
 # Guessing Game
 # Punkt 1 - done
@@ -58,62 +58,36 @@ def stats()
     sum = 0.0
     divider = 0.0
     numbers = []
+    results = []
 
     hall_of_fame.each { |p|
+            results.append(p.counter)
             numbers.append(p.number_to_guess)
             sum += p.counter
             divider += 1.0
     }
 
     average = sum / divider
-    puts "Średnia ilość prób #{average.to_f}"
-    puts "Najmniejsza zgadnięta liczba #{numbers.min}"
-    puts "Największa zgadnięta liczba #{numbers.max}"
+    puts "\nŚrednia ilość prób do odgadnięcia ukrytej liczby => #{average.to_f}".light_white
+    puts "Najmniej prób przed zgadnięciem liczby => #{results.min}".light_cyan
+    puts "Najwięcej prób przed zgadnięciem liczby => #{results.max}".light_green
+    puts "Najmniejsza zgadnięta liczba => #{numbers.min}".light_yellow
+    puts "Największa zgadnięta liczba => #{numbers.max}".light_red
+    puts ""
 end
 
 def checkIfNewRecord(player)
     hall_of_fame = extractPlayers()
     results = []
     hall_of_fame.each { |p|
-        results.append(p.number_to_guess) 
+        results.append(p.counter)
     }
+
+    puts results.min
 
     if player.counter < results.min
         puts "Właśnie ustanowileś nowy rekord w Guessing Game! Gratulacje".light_green
     end
-end
-
-
-def menu()
-    begin
-        puts "Witamy w Guessing Game".light_cyan
-        puts "1. Zagraj".light_green
-        puts "2. Zobacz ostatnie wyniki".light_yellow
-        puts "3. Ciekawe statystki".light_magenta
-        puts "4. Wyjdź z gry".light_red
-        #puts String.colors
-        #puts String.modes
-
-        option = gets
-    
-        case option.to_i
-        when 1
-            game()
-        when 2
-            printResults
-            menu()
-        when 3
-            stats()
-            menu()
-        when 4
-            puts "papa".light_magenta
-            exit
-        else
-            puts "Nie ma takiej opcji"    
-        end
-    rescue Interrupt => e
-        puts "papa".light_magenta
-    end   
 end
 
 def game()
@@ -165,8 +139,38 @@ def playAgain()
         puts "Koniec działania programu".light_red
         exit
     else
-        puts "Nie ma takiej opcji mordo".light_yellow
+        puts "Nie ma takiej opcji".light_yellow
     end    
+end
+
+def menu()
+    begin
+        puts "Witamy w Guessing Game".light_cyan
+        puts "1. Zagraj".light_green
+        puts "2. Zobacz ostatnie wyniki".light_yellow
+        puts "3. Ciekawe statystki".light_magenta
+        puts "4. Wyjdź z gry".light_red
+
+        option = gets
+    
+        case option.to_i
+        when 1
+            game()
+        when 2
+            printResults
+            menu()
+        when 3
+            stats()
+            menu()
+        when 4
+            puts "papa".light_magenta
+            exit
+        else
+            puts "Nie ma takiej opcji"    
+        end
+    rescue Interrupt => e
+        puts "papa".light_magenta
+    end   
 end
 
  
