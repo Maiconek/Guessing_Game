@@ -40,14 +40,12 @@ end
 def printResults()
     results = extractPlayers()
     position = 1
-
+    puts "%-2s %-24s %-15s %-18s".light_yellow % ["Nr", "Nickname", "Ilość prób", "Wylosowana liczba"]
     results.each { |p|
         if results.index(p) % 2 == 0
-            puts "#{position}. #{p.name}, ilość prób: #{p.counter}, zgadywana liczba #{p.number_to_guess}"
-            .colorize(:color => :light_white, :background => :blue)
+            puts "%-2d %-24s %-15d %-17d".colorize(:color => :light_white, :background => :blue) % [position, p.name, p.counter, p.number_to_guess]    
         else
-            puts "#{position}. #{p.name}, ilość prób: #{p.counter}, zgadywana liczba #{p.number_to_guess}"
-            .colorize(:color => :light_white)
+            puts "%-2d %-24s %-15d %-17d".colorize(:color => :light_white) % [position, p.name, p.counter, p.number_to_guess]
         end
         position += 1
     }
