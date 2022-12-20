@@ -37,6 +37,14 @@ def extractPlayers()
     return sorted_hall_of_fame
 end
 
+def rules()
+    print "\nProgram losuje liczbe z zakresu od 1 do 100. Twoim zadaniem jest odgadnięcie tej liczby.\n".light_green 
+    print "Jeżeli trafisz w poprawną liczbe, program ci pogratulujei zapisze twój wynik.\n".light_green
+    print "Jeżeli nie odgadniesz program poinformuje Cię, czy podana liczba jest za mała, czy za duża.\n".light_green 
+    print "Powodzenia\n".light_green
+    puts ""
+end
+
 def printResults()
     results = extractPlayers()
     position = 1
@@ -145,9 +153,10 @@ def menu()
     begin
         puts "Witamy w Guessing Game".light_cyan
         puts "1. Zagraj".light_green
-        puts "2. Zobacz ostatnie wyniki".light_yellow
-        puts "3. Ciekawe statystki".light_magenta
-        puts "4. Wyjdź z gry".light_red
+        puts "2. Zasady".light_blue
+        puts "3. Zobacz ostatnie wyniki".light_yellow
+        puts "4. Ciekawe statystki".light_magenta
+        puts "5. Wyjdź z gry".light_red
 
         option = gets
     
@@ -155,12 +164,15 @@ def menu()
         when 1
             game()
         when 2
-            printResults
+            rules()
             menu()
         when 3
-            stats()
+            printResults()
             menu()
         when 4
+            stats()
+            menu()
+        when 5
             puts "papa".light_magenta
             exit
         else
