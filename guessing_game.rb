@@ -89,9 +89,10 @@ def checkIfNewRecord(player)
         results.append(p.counter)
     }
 
-    puts results.min
 
-    if player.counter < results.min
+    if results.min == nil
+        puts "Wow, jako pierwszy wpisałeś sie na liste wyników. Tym samym zajmujesz pierwsze miejsce!"
+    elsif player.counter < results.min
         puts "Właśnie ustanowileś nowy rekord w Guessing Game! Gratulacje".light_green
     end
 end
