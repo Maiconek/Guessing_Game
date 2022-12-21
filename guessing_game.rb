@@ -13,16 +13,17 @@
 require 'date'
 require 'colorize'
 
-String.disable_colorization = false
 
 $gracz = Struct.new(:name, :counter, :number_to_guess, :date)
 
+#fukcja zapisująca wynik gracza do pliku tekstowego
 def saveResults(gracz)
     File.open("hallOfFame.txt", 'a') do |f|
         f.write "#{gracz[:name]},#{gracz[:counter]},#{gracz[:number_to_guess]},#{gracz[:date]}\n"
     end
 end
 
+#funkcja, która wpisuje graczy z pliku txt do listy.
 def extractPlayers()
     hall_of_fame = []
 
@@ -59,6 +60,7 @@ def printResults()
     }
 end
 
+#funkcja statystki
 def stats()
     hall_of_fame = extractPlayers()
     sum = 0.0
@@ -74,7 +76,7 @@ def stats()
     }
 
     average = sum / divider
-    puts "\nŚrednia ilość prób do odgadnięcia ukrytej liczby => #{average.to_f}".light_white
+    puts "\nŚrednia ilość prób do odgadnięcia ukrytej liczby => #{'%.2f' % average.to_f}".light_white
     puts "Najmniej prób przed zgadnięciem liczby => #{results.min}".light_cyan
     puts "Najwięcej prób przed zgadnięciem liczby => #{results.max}".light_green
     puts "Najmniejsza zgadnięta liczba => #{numbers.min}".light_yellow
@@ -82,6 +84,7 @@ def stats()
     puts ""
 end
 
+#funkcja sprawdzająca czy gracz ustanowił nowy rekord w grze
 def checkIfNewRecord(player)
     hall_of_fame = extractPlayers()
     results = []
@@ -97,6 +100,7 @@ def checkIfNewRecord(player)
     end
 end
 
+#funkcja zawierająca logike gry
 def game()
     target = rand(1..100)
     game_over = false
@@ -134,7 +138,7 @@ def game()
     playAgain()
 end
 
-
+#funkcja odpowiedzialna za zapytanie gracza czy chce grac dalej
 def playAgain()
     puts "Czy gramy jeszcze raz? (Y/N)".light_magenta
 
@@ -150,6 +154,7 @@ def playAgain()
     end    
 end
 
+#funkcja obsługująca menu główne
 def menu()
     begin
         puts "Witamy w Guessing Game".light_cyan
