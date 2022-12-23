@@ -23,14 +23,14 @@ def saveResults(gracz)
     end
 end
 
-#funkcja, która wpisuje graczy z pliku txt do listy.
+#funkcja, która wypisuje graczy z pliku .txt do listy.
 def extractPlayers()
     hall_of_fame = []
 
-    if(File.file?('hallOfFame.txt'))
-        File.foreach("hallOfFame.txt") { |each_line|  
+    if(File.file?('hallOfFame.txt')) #jezeli plik txt istnieje
+        File.foreach("hallOfFame.txt") { |each_line|  #dla każdej jego linii
             arr = each_line.split(",")
-            hall_of_fame.push($gracz.new(arr[0], arr[1].to_i, arr[2].to_i, arr[3]))
+            hall_of_fame.push($gracz.new(arr[0], arr[1].to_i, arr[2].to_i, arr[3])) #wprowadź gracza do listy
         }
     end
 
@@ -48,6 +48,12 @@ end
 
 def printResults()
     results = extractPlayers()
+
+    if results.empty?()
+        puts "Tablica wyników jest pusta!".light_red
+        return
+    end
+
     position = 1
     puts "%-2s %-24s %-15s %-18s".light_yellow % ["Nr", "Nickname", "Ilość prób", "Wylosowana liczba"]
     results.each { |p|
@@ -60,7 +66,7 @@ def printResults()
     }
 end
 
-#funkcja statystki
+#funkcja odpowiadająca za przedstawienie statystk np. średniej ilości prób wymaganej do odgadnięcia liczby
 def stats()
     hall_of_fame = extractPlayers()
     sum = 0.0
@@ -69,8 +75,8 @@ def stats()
     results = []
 
     hall_of_fame.each { |p|
-            results.append(p.counter)
-            numbers.append(p.number_to_guess)
+            results.append(p.counter) #lista zawierająca ilość prób
+            numbers.append(p.number_to_guess) #lista zawierająca liczby które zostały wylosowane do odgadnięcia
             sum += p.counter
             divider += 1.0
     }
@@ -88,6 +94,7 @@ end
 def checkIfNewRecord(player)
     hall_of_fame = extractPlayers()
     results = []
+    
     hall_of_fame.each { |p|
         results.append(p.counter)
     }
@@ -130,10 +137,10 @@ def game()
     puts "Podaj swoje imie i nazwisko, abyśmy mogli zapisać twój wynik".light_blue
     names = gets
 
-    player = $gracz.new(names.strip, counter, target, Time.now)
+    player = $gracz.new(names.strip, counter, target, Time.now) #tworzymy nowego gracza 
 
-    checkIfNewRecord(player)
-    saveResults(player)
+    checkIfNewRecord(player) #sprawdzamy czy pobił rekord globalny
+    saveResults(player)#zapisujemy go i jego wynik do pliku txt
 
     playAgain()
 end
@@ -151,6 +158,7 @@ def playAgain()
         exit
     else
         puts "Nie ma takiej opcji".light_yellow
+        playAgain()
     end    
 end
 
@@ -182,7 +190,8 @@ def menu()
             puts "papa".light_magenta
             exit
         else
-            puts "Nie ma takiej opcji"    
+            puts "Nie ma takiej opcji"
+            menu()    
         end
     rescue Interrupt => e
         puts "papa".light_magenta
